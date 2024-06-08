@@ -13,6 +13,8 @@ typealias OSImage = UIImage
 typealias OSImage = NSImage
 #endif
 
+let refreshRate: Double = 0.2
+
 struct ContentView: View {
     @State var counter: Int = 0
     @State var qr: QR = .init(string: "hello!")!
@@ -20,7 +22,7 @@ struct ContentView: View {
 
     @Namespace var namespace
 
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: refreshRate, on: .main, in: .common).autoconnect()
 
     var body: some View {
         VStack {
@@ -31,7 +33,7 @@ struct ContentView: View {
         .frame(width: 300, height: 600)
         .onReceive(timer) { _ in
             counter += 1
-            withAnimation(.linear(duration: 1)) {
+            withAnimation(.easeInOut(duration: refreshRate)) {
                 qr = .init(string: "hello! \(counter)")!
             }
         }
